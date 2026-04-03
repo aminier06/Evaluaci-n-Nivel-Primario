@@ -25,11 +25,21 @@ header.membrete {
     margin: 0 auto;
 }
 
+/* TÍTULO EN DOS LÍNEAS FORZADAS */
 .titulo-sistema {
-    font-size: 1.7rem;
     font-weight: 800;
     color: #003366;
-    white-space: nowrap;
+}
+
+.titulo-linea1 {
+    font-size: 1.35rem;
+}
+
+.titulo-linea2 {
+    font-size: 1.9rem;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
 }
 
 .subtitulo-inst {
@@ -82,6 +92,7 @@ header.membrete {
     box-shadow: 0 6px 14px rgba(0,0,0,0.12);
     margin-top: 6px;
     z-index: 1000;
+
     opacity: 0;
     visibility: hidden;
     transform: translateY(5px);
@@ -130,6 +141,17 @@ iframe {
     height: 100%;
     border: none;
 }
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .titulo-linea1 {
+        font-size: 1.2rem;
+    }
+
+    .titulo-linea2 {
+        font-size: 1.5rem;
+    }
+}
 </style>
 </head>
 
@@ -139,13 +161,14 @@ iframe {
 <div class="header-inner">
 
 <div class="titulo-sistema">
-    <span class="titulo-largo">
+    <div class="titulo-linea1">
         Sistema de Resultados de Evaluación del Nivel Primario
-    </span>
-    <span class="titulo-corto">
+    </div>
+    <div class="titulo-linea2">
         SIREV Primaria
-    </span>
+    </div>
 </div>
+
 <div class="subtitulo-inst">Ministerio de Educación</div>
 <div class="subtitulo-inst">Viceministerio de Servicios Técnicos y Pedagógicos</div>
 <div class="dependencia">Dirección de Educación Primaria</div>
@@ -158,40 +181,43 @@ Resultados de Evaluaciones Diagnóstica y de Seguimiento – 2025-2026
 
 <div class="acciones">
 
+<!-- PRUEBAS -->
 <div class="dropdown">
 <button class="btn btn-principal" onclick="toggleMenu('menuPruebas')">
 Pruebas y rúbricas ▼
 </button>
 
 <div id="menuPruebas" class="dropdown-content">
-<a href="https://drive.google.com/drive/folders/1DVgvr8SuIApyFKk2kQUaZjy2c736xGZh?usp=drive_link" target="_blank" rel="noopener noreferrer">Septiembre</a>
-<a href="https://drive.google.com/drive/folders/1mHf3_gLi4ZIj_YLRPB0-CYh0b_Y1CMWV?usp=drive_link" target="_blank" rel="noopener noreferrer">Noviembre</a>
-<a href="https://drive.google.com/drive/folders/1JP1DCceZfuHuNL4FxIySqalPvCh36SAb?usp=drive_link" target="_blank" rel="noopener noreferrer">Marzo</a>
+<a href="https://drive.google.com/drive/folders/1DVgvr8SuIApyFKk2kQUaZjy2c736xGZh?usp=drive_link" target="_blank">Septiembre</a>
+<a href="https://drive.google.com/drive/folders/1mHf3_gLi4ZIj_YLRPB0-CYh0b_Y1CMWV?usp=drive_link" target="_blank">Noviembre</a>
+<a href="https://drive.google.com/drive/folders/1JP1DCceZfuHuNL4FxIySqalPvCh36SAb?usp=drive_link" target="_blank">Marzo</a>
 <span>Mayo (próximamente)</span>
 </div>
 </div>
 
+<!-- SISTEMATIZACIÓN -->
 <div class="dropdown">
 <button class="btn btn-secundario" onclick="toggleMenu('menuSistematizacion')">
 Sistematización de centros ▼
 </button>
 
 <div id="menuSistematizacion" class="dropdown-content">
-<a href="https://lookerstudio.google.com/reporting/8b050392-1c17-4511-be16-64a07323885e" target="_blank" rel="noopener noreferrer">Septiembre</a>
-<a href="https://lookerstudio.google.com/reporting/60bb48a6-a3df-45d9-ae1f-2a2272081fe4" target="_blank" rel="noopener noreferrer">Noviembre</a>
-<a href="https://lookerstudio.google.com/reporting/60bb48a6-a3df-45d9-ae1f-2a2272081fe4" target="_blank" rel="noopener noreferrer">Marzo</a>
+<a href="https://lookerstudio.google.com/reporting/8b050392-1c17-4511-be16-64a07323885e" target="_blank">Septiembre</a>
+<a href="https://lookerstudio.google.com/reporting/60bb48a6-a3df-45d9-ae1f-2a2272081fe4" target="_blank">Noviembre</a>
+<a href="https://lookerstudio.google.com/reporting/60bb48a6-a3df-45d9-ae1f-2a2272081fe4" target="_blank">Marzo</a>
 <span>Mayo (próximamente)</span>
 </div>
 </div>
 
+<!-- FORMULARIOS -->
 <div class="dropdown">
 <button class="btn btn-form" onclick="toggleMenu('menuFormularios')">
 Formularios ▼
 </button>
 
 <div id="menuFormularios" class="dropdown-content">
-<a href="https://docs.google.com/forms/d/e/1FAIpQLSeKe12G3Xwn3i0RH13EwP58DYFypbSxQHjCDETkz7i26g5XQA/viewform" target="_blank" rel="noopener noreferrer">Primer ciclo</a>
-<a href="https://forms.gle/VhKJqGCeXighPDQWA" target="_blank" rel="noopener noreferrer">Segundo ciclo</a>
+<a href="https://docs.google.com/forms/d/e/1FAIpQLSeKe12G3Xwn3i0RH13EwP58DYFypbSxQHjCDETkz7i26g5XQA/viewform" target="_blank">Primer ciclo</a>
+<a href="https://forms.gle/VhKJqGCeXighPDQWA" target="_blank">Segundo ciclo</a>
 </div>
 </div>
 
@@ -200,12 +226,7 @@ Formularios ▼
 
 <main>
 <div class="report-container">
-<iframe
-    title="Evaluación Diagnóstica y de Seguimiento Nivel Primario 2025-2026"
-    src="https://app.powerbi.com/view?r=eyJrIjoiZWE0NjFhYWYtY2M5ZS00ZDQ4LWFiZDAtNmU1ZGZkYTVjNWViIiwidCI6IjY2ZTI4OThiLTJjMzUtNDMzZi1hNzUzLWJkNjRhY2EzOWFmYiIsImMiOjF9"
-    allowfullscreen
-    loading="lazy">
-</iframe>
+<iframe src="https://app.powerbi.com/view?r=eyJrIjoiZWE0NjFhYWYtY2M5ZS00ZDQ4LWFiZDAtNmU1ZGZkYTVjNWViIiwidCI6IjY2ZTI4OThiLTJjMzUtNDMzZi1hNzUzLWJkNjRhY2EzOWFmYiIsImMiOjF9"></iframe>
 </div>
 </main>
 
