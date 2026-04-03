@@ -4,20 +4,14 @@
     <meta charset="UTF-8">
     <title>SIREV Primaria</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sistema de Resultados de Evaluación del Nivel Primario (SIREV Primaria).">
 
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             background-color: #f3f6f9;
             color: #1f2937;
-            line-height: 1.5;
         }
 
         header.membrete {
@@ -31,15 +25,10 @@
             margin: 0 auto;
         }
 
-        .header-texto {
-            text-align: left;
-        }
-
         .titulo-sistema {
             font-size: 1.7rem;
             font-weight: 800;
             color: #003366;
-            margin-bottom: 0.3rem;
             white-space: nowrap;
         }
 
@@ -52,174 +41,76 @@
         .dependencia {
             font-size: 1rem;
             font-weight: 600;
-            color: #222;
         }
 
         .periodo {
-            margin-top: 0.8rem;
-            font-size: 1rem;
+            margin-top: 0.6rem;
             font-weight: 700;
-            color: #111827;
         }
 
         .acciones {
             max-width: 1200px;
             margin: 1rem auto 0;
             display: flex;
-            justify-content: flex-start;
-            align-items: center;
             gap: 12px;
             flex-wrap: wrap;
         }
 
         .btn {
-            display: inline-block;
-            text-decoration: none;
             font-weight: 700;
             font-size: 0.95rem;
             padding: 0.7rem 1.3rem;
             border-radius: 8px;
-            transition: all 0.2s ease;
-            min-width: 220px;
-            text-align: center;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.08);
             cursor: pointer;
+            border: none;
         }
 
-        .btn-principal {
-            background-color: #004578;
-            color: #fff;
-            border: 1px solid #004578;
-        }
+        .btn-principal { background: #004578; color: #fff; }
+        .btn-secundario { background: #fff; color: #004578; border: 1px solid #004578; }
+        .btn-form { background: #1f7a3a; color: #fff; }
 
-        .btn-principal:hover {
-            background-color: #005a9e;
-        }
-
-        .btn-secundario {
-            background-color: #ffffff;
-            color: #004578;
-            border: 1px solid #004578;
-        }
-
-        .btn-secundario:hover {
-            background-color: #eef6fd;
-        }
-
-        .btn-form {
-            background-color: #1f7a3a;
-            color: #fff;
-            border: 1px solid #1f7a3a;
-        }
-
-        .btn-form:hover {
-            background-color: #249b48;
-        }
-
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
-
-        .dropdown button {
-            font-family: inherit;
-        }
+        .dropdown { position: relative; }
 
         .dropdown-content {
             display: none;
             position: absolute;
-            top: calc(100% + 4px);
-            left: 0;
-            background-color: #ffffff;
+            background: #fff;
             min-width: 240px;
-            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
             border-radius: 8px;
-            overflow: hidden;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+            margin-top: 4px;
             z-index: 1000;
-            border: 1px solid #d1d5db;
         }
 
-        .dropdown-content a {
+        .dropdown-content a,
+        .dropdown-content span {
             display: block;
-            padding: 12px 14px;
+            padding: 12px;
             text-decoration: none;
             color: #1f2937;
-            font-size: 0.92rem;
             font-weight: 600;
-            background-color: #fff;
         }
 
         .dropdown-content a:hover {
-            background-color: #f0f4f8;
+            background: #f0f4f8;
         }
 
-        .dropdown-content.show {
-            display: block;
+        .dropdown-content span {
+            color: #9ca3af;
         }
 
-        main {
-            padding: 1.5rem 1rem 2rem;
-        }
+        .show { display: block; }
 
-        .report-wrapper {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
-        .report-card {
-            background: #ffffff;
-            border-radius: 14px;
-            padding: 1rem;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-        }
+        main { padding: 1.5rem; }
 
         .report-container {
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            border-radius: 10px;
-            overflow: hidden;
-            background-color: #e8edf3;
+            aspect-ratio: 16/9;
         }
 
         iframe {
             width: 100%;
             height: 100%;
             border: none;
-        }
-
-        footer {
-            text-align: center;
-            font-size: 0.9rem;
-            color: #4b5563;
-            margin: 1rem 0;
-            padding: 0 1rem;
-        }
-
-        @media (max-width: 900px) {
-            .titulo-sistema {
-                white-space: normal;
-                font-size: 1.3rem;
-            }
-
-            .acciones {
-                justify-content: flex-start;
-            }
-
-            .btn,
-            .dropdown {
-                width: 100%;
-                max-width: 320px;
-            }
-
-            .dropdown button {
-                width: 100%;
-            }
-
-            .dropdown-content {
-                position: static;
-                width: 100%;
-                margin-top: 6px;
-            }
         }
     </style>
 </head>
@@ -228,91 +119,89 @@
 
 <header class="membrete">
     <div class="header-inner">
-        <div class="header-texto">
-            <div class="titulo-sistema">
-                Sistema de Resultados de Evaluación del Nivel Primario (SIREV Primaria)
-            </div>
+        <div class="titulo-sistema">
+            Sistema de Resultados de Evaluaciones del Nivel Primario (SIREV Primaria)
+        </div>
 
-            <div class="subtitulo-inst">Ministerio de Educación</div>
-            <div class="subtitulo-inst">Viceministerio de Servicios Técnicos y Pedagógicos</div>
-            <div class="dependencia">Dirección de Educación Primaria</div>
+        <div class="subtitulo-inst">Ministerio de Educación</div>
+        <div class="subtitulo-inst">Viceministerio de Servicios Técnicos y Pedagógicos</div>
+        <div class="dependencia">Dirección de Educación Primaria</div>
 
-            <div class="periodo">
-                Resultados de Evaluaciones Diagnóstica y de Seguimiento<br>
-                Año Lectivo 2025-2026
-            </div>
+        <div class="periodo">
+            Resultados de Evaluaciones Diagnóstica y de Seguimiento – 2025-2026
         </div>
     </div>
 
     <div class="acciones">
-        <a href="https://drive.google.com/drive/folders/1JP1DCceZfuHuNL4FxIySqalPvCh36SAb?usp=sharing"
-           target="_blank"
-           rel="noopener noreferrer"
-           class="btn btn-principal">
-            Pruebas y rúbricas
-        </a>
 
-        <a href="https://lookerstudio.google.com/reporting/60bb48a6-a3df-45d9-ae1f-2a2272081fe4"
-           target="_blank"
-           rel="noopener noreferrer"
-           class="btn btn-secundario">
-            Sistematización de centros
-        </a>
-
+        <!-- Pruebas -->
         <div class="dropdown">
-            <button type="button" class="btn btn-form" onclick="toggleDropdown()">
+            <button class="btn btn-principal" onclick="toggleMenu('menuPruebas')">
+                Pruebas y rúbricas ▼
+            </button>
+
+            <div id="menuPruebas" class="dropdown-content">
+                <a href="https://drive.google.com/drive/folders/1DVgvr8SuIApyFKk2kQUaZjy2c736xGZh?usp=drive_link" target="_blank">Septiembre</a>
+                <a href="https://drive.google.com/drive/folders/1mHf3_gLi4ZIj_YLRPB0-CYh0b_Y1CMWV?usp=drive_link" target="_blank">Noviembre</a>
+                <a href="https://drive.google.com/drive/folders/1JP1DCceZfuHuNL4FxIySqalPvCh36SAb?usp=drive_link" target="_blank">Marzo</a>
+                <span>Mayo (próximamente)</span>
+            </div>
+        </div>
+
+        <!-- Sistematización -->
+        <div class="dropdown">
+            <button class="btn btn-secundario" onclick="toggleMenu('menuSistematizacion')">
+                Sistematización de centros ▼
+            </button>
+
+            <div id="menuSistematizacion" class="dropdown-content">
+                <span>Septiembre (próximamente)</span>
+                <a href="https://lookerstudio.google.com/reporting/60bb48a6-a3df-45d9-ae1f-2a2272081fe4" target="_blank">Noviembre</a>
+                <a href="https://lookerstudio.google.com/reporting/60bb48a6-a3df-45d9-ae1f-2a2272081fe4" target="_blank">Marzo</a>
+                <span>Mayo (próximamente)</span>
+            </div>
+        </div>
+
+        <!-- Formularios -->
+        <div class="dropdown">
+            <button class="btn btn-form" onclick="toggleMenu('menuFormularios')">
                 Formularios ▼
             </button>
 
             <div id="menuFormularios" class="dropdown-content">
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeKe12G3Xwn3i0RH13EwP58DYFypbSxQHjCDETkz7i26g5XQA/viewform?usp=sharing&ouid=109785604339926861472"
-                   target="_blank"
-                   rel="noopener noreferrer">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeKe12G3Xwn3i0RH13EwP58DYFypbSxQHjCDETkz7i26g5XQA/viewform" target="_blank">
                     Primer ciclo
                 </a>
-
-                <a href="https://forms.gle/VhKJqGCeXighPDQWA"
-                   target="_blank"
-                   rel="noopener noreferrer">
+                <a href="https://forms.gle/VhKJqGCeXighPDQWA" target="_blank">
                     Segundo ciclo
                 </a>
             </div>
         </div>
+
     </div>
 </header>
 
 <main>
-    <div class="report-wrapper">
-        <div class="report-card">
-            <div class="report-container">
-                <iframe
-                    title="Evaluación Diagnóstica y de Seguimiento Nivel Primario 2025-2026"
-                    src="https://app.powerbi.com/view?r=eyJrIjoiZWE0NjFhYWYtY2M5ZS00ZDQ4LWFiZDAtNmU1ZGZkYTVjNWViIiwidCI6IjY2ZTI4OThiLTJjMzUtNDMzZi1hNzUzLWJkNjRhY2EzOWFmYiIsImMiOjF9"
-                    allowfullscreen
-                    loading="lazy">
-                </iframe>
-            </div>
-        </div>
+    <div class="report-container">
+        <iframe src="https://app.powerbi.com/view?r=eyJrIjoiZWE0NjFhYWYtY2M5ZS00ZDQ4LWFiZDAtNmU1ZGZkYTVjNWViIiwidCI6IjY2ZTI4OThiLTJjMzUtNDMzZi1hNzUzLWJkNjRhY2EzOWFmYiIsImMiOjF9"></iframe>
     </div>
 </main>
 
-<footer>
-    © 2026 Ministerio de Educación – Desarrollado por <strong>Aneudy Minier</strong>
-</footer>
-
 <script>
-    function toggleDropdown() {
-        document.getElementById("menuFormularios").classList.toggle("show");
+function toggleMenu(id) {
+    document.querySelectorAll('.dropdown-content').forEach(menu => {
+        if (menu.id !== id) menu.classList.remove('show');
+    });
+    document.getElementById(id).classList.toggle('show');
+}
+
+window.onclick = function(e) {
+    if (!e.target.closest('.dropdown')) {
+        document.querySelectorAll('.dropdown-content').forEach(menu => {
+            menu.classList.remove('show');
+        });
     }
-
-    window.onclick = function(event) {
-        const dropdown = document.getElementById("menuFormularios");
-        const button = document.querySelector(".btn-form");
-
-        if (!button.contains(event.target) && !dropdown.contains(event.target)) {
-            dropdown.classList.remove("show");
-        }
-    };
+};
 </script>
 
 </body>
