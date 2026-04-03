@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>SIREV Primaria</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de Resultados de Evaluación del Nivel Primario (SIREV Primaria).">
 
     <style>
         * {
@@ -66,11 +67,13 @@
             margin: 1rem auto 0;
             display: flex;
             justify-content: flex-start;
+            align-items: center;
             gap: 12px;
             flex-wrap: wrap;
         }
 
         .btn {
+            display: inline-block;
             text-decoration: none;
             font-weight: 700;
             font-size: 0.95rem;
@@ -80,6 +83,7 @@
             min-width: 220px;
             text-align: center;
             box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+            cursor: pointer;
         }
 
         .btn-principal {
@@ -100,6 +104,57 @@
 
         .btn-secundario:hover {
             background-color: #eef6fd;
+        }
+
+        .btn-form {
+            background-color: #1f7a3a;
+            color: #fff;
+            border: 1px solid #1f7a3a;
+        }
+
+        .btn-form:hover {
+            background-color: #249b48;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown button {
+            font-family: inherit;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            background-color: #ffffff;
+            min-width: 240px;
+            box-shadow: 0 6px 14px rgba(0,0,0,0.12);
+            border-radius: 8px;
+            overflow: hidden;
+            z-index: 1000;
+            border: 1px solid #d1d5db;
+        }
+
+        .dropdown-content a {
+            display: block;
+            padding: 12px 14px;
+            text-decoration: none;
+            color: #1f2937;
+            font-size: 0.92rem;
+            font-weight: 600;
+            background-color: #fff;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f0f4f8;
+        }
+
+        .dropdown-content.show {
+            display: block;
         }
 
         main {
@@ -123,6 +178,7 @@
             aspect-ratio: 16 / 9;
             border-radius: 10px;
             overflow: hidden;
+            background-color: #e8edf3;
         }
 
         iframe {
@@ -136,10 +192,10 @@
             font-size: 0.9rem;
             color: #4b5563;
             margin: 1rem 0;
+            padding: 0 1rem;
         }
 
         @media (max-width: 900px) {
-
             .titulo-sistema {
                 white-space: normal;
                 font-size: 1.3rem;
@@ -149,9 +205,20 @@
                 justify-content: flex-start;
             }
 
-            .btn {
+            .btn,
+            .dropdown {
                 width: 100%;
                 max-width: 320px;
+            }
+
+            .dropdown button {
+                width: 100%;
+            }
+
+            .dropdown-content {
+                position: static;
+                width: 100%;
+                margin-top: 6px;
             }
         }
     </style>
@@ -161,7 +228,6 @@
 
 <header class="membrete">
     <div class="header-inner">
-
         <div class="header-texto">
             <div class="titulo-sistema">
                 Sistema de Resultados de Evaluación del Nivel Primario (SIREV Primaria)
@@ -181,15 +247,37 @@
     <div class="acciones">
         <a href="https://drive.google.com/drive/folders/1JP1DCceZfuHuNL4FxIySqalPvCh36SAb?usp=sharing"
            target="_blank"
+           rel="noopener noreferrer"
            class="btn btn-principal">
             Pruebas y rúbricas
         </a>
 
         <a href="https://lookerstudio.google.com/reporting/60bb48a6-a3df-45d9-ae1f-2a2272081fe4"
            target="_blank"
+           rel="noopener noreferrer"
            class="btn btn-secundario">
-            Sistematización de centros
+            Sistematización de centro
         </a>
+
+        <div class="dropdown">
+            <button type="button" class="btn btn-form" onclick="toggleDropdown()">
+                Formularios ▼
+            </button>
+
+            <div id="menuFormularios" class="dropdown-content">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeKe12G3Xwn3i0RH13EwP58DYFypbSxQHjCDETkz7i26g5XQA/viewform?usp=sharing&ouid=109785604339926861472"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    Primer ciclo
+                </a>
+
+                <a href="https://forms.gle/VhKJqGCeXighPDQWA"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                    Segundo ciclo
+                </a>
+            </div>
+        </div>
     </div>
 </header>
 
@@ -197,7 +285,12 @@
     <div class="report-wrapper">
         <div class="report-card">
             <div class="report-container">
-                <iframe src="https://app.powerbi.com/view?r=eyJrIjoiZWE0NjFhYWYtY2M5ZS00ZDQ4LWFiZDAtNmU1ZGZkYTVjNWViIiwidCI6IjY2ZTI4OThiLTJjMzUtNDMzZi1hNzUzLWJkNjRhY2EzOWFmYiIsImMiOjF9"></iframe>
+                <iframe
+                    title="Evaluación Diagnóstica y de Seguimiento Nivel Primario 2025-2026"
+                    src="https://app.powerbi.com/view?r=eyJrIjoiZWE0NjFhYWYtY2M5ZS00ZDQ4LWFiZDAtNmU1ZGZkYTVjNWViIiwidCI6IjY2ZTI4OThiLTJjMzUtNDMzZi1hNzUzLWJkNjRhY2EzOWFmYiIsImMiOjF9"
+                    allowfullscreen
+                    loading="lazy">
+                </iframe>
             </div>
         </div>
     </div>
@@ -206,6 +299,21 @@
 <footer>
     © 2026 Ministerio de Educación – Desarrollado por <strong>Aneudy Minier</strong>
 </footer>
+
+<script>
+    function toggleDropdown() {
+        document.getElementById("menuFormularios").classList.toggle("show");
+    }
+
+    window.onclick = function(event) {
+        const dropdown = document.getElementById("menuFormularios");
+        const button = document.querySelector(".btn-form");
+
+        if (!button.contains(event.target) && !dropdown.contains(event.target)) {
+            dropdown.classList.remove("show");
+        }
+    };
+</script>
 
 </body>
 </html>
