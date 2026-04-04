@@ -25,22 +25,13 @@ header.membrete {
     margin: 0 auto;
 }
 
-/* TÍTULO */
 .titulo-sistema {
     font-weight: 800;
     color: #003366;
 }
 
-.titulo-linea1 {
-    font-size: 1.35rem;
-}
-
-.titulo-linea2 {
-    font-size: 1.9rem;
-    font-weight: 900;
-    letter-spacing: 0.5px;
-    margin-top: 2px;
-}
+.titulo-linea1 { font-size: 1.35rem; }
+.titulo-linea2 { font-size: 1.9rem; font-weight: 900; }
 
 .subtitulo-inst {
     font-size: 1.05rem;
@@ -48,15 +39,9 @@ header.membrete {
     color: #004a80;
 }
 
-.dependencia {
-    font-size: 1rem;
-    font-weight: 600;
-}
+.dependencia { font-weight: 600; }
 
-.periodo {
-    margin-top: 0.6rem;
-    font-weight: 700;
-}
+.periodo { margin-top: 0.6rem; font-weight: 700; }
 
 .acciones {
     max-width: 1200px;
@@ -75,41 +60,26 @@ header.membrete {
     border: 1px solid #004578;
     background: #004578;
     color: #fff;
-    transition: background 0.2s ease;
 }
 
-.btn:hover {
-    background: #005a9e;
-}
+.btn:hover { background: #005a9e; }
 
-/* DROPDOWN */
-.dropdown {
-    position: relative;
-}
+.dropdown { position: relative; }
 
 .dropdown-content {
-    display: block;
     position: absolute;
     background: #fff;
     min-width: 240px;
     border-radius: 8px;
     box-shadow: 0 6px 14px rgba(0,0,0,0.12);
     margin-top: 6px;
-    z-index: 1000;
-
     opacity: 0;
     visibility: hidden;
     transform: translateY(5px);
-    transition: all 0.2s ease;
+    transition: 0.2s;
 }
 
 .dropdown:hover .dropdown-content {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.dropdown-content.show {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
@@ -128,17 +98,9 @@ header.membrete {
     background: #f0f4f8;
 }
 
-.dropdown-content span {
-    color: #9ca3af;
-}
+main { padding: 1.5rem; }
 
-main {
-    padding: 1.5rem;
-}
-
-.report-container {
-    aspect-ratio: 16/9;
-}
+.report-container { aspect-ratio: 16/9; }
 
 iframe {
     width: 100%;
@@ -146,18 +108,11 @@ iframe {
     border: none;
 }
 
-/* FOOTER */
 .footer {
     text-align: center;
+    margin: 2rem 0 1rem;
     font-size: 0.9rem;
     color: #4b5563;
-    margin: 2rem 0 1rem;
-}
-
-/* RESPONSIVE */
-@media (max-width: 900px) {
-    .titulo-linea1 { font-size: 1.2rem; }
-    .titulo-linea2 { font-size: 1.5rem; }
 }
 </style>
 </head>
@@ -168,57 +123,58 @@ iframe {
 <div class="header-inner">
 
 <div class="titulo-sistema">
-    <div class="titulo-linea1">
-        Sistema de Resultados de Evaluaciones del Nivel Primario
-    </div>
-    <div class="titulo-linea2">
-        SIREV Primaria
-    </div>
+    <div class="titulo-linea1">Sistema de Resultados de Evaluaciones del Nivel Primario</div>
+    <div class="titulo-linea2">SIREV Primaria</div>
 </div>
 
 <div class="subtitulo-inst">Ministerio de Educación</div>
 <div class="subtitulo-inst">Viceministerio de Servicios Técnicos y Pedagógicos</div>
 <div class="dependencia">Dirección de Educación Primaria</div>
 
+<div class="periodo">
+Resultados de Evaluaciones Diagnóstica y de Seguimiento – 2025-2026
+</div>
+
 </div>
 
 <div class="acciones">
 
+<!-- NUEVO: AÑO ESCOLAR -->
+<div class="dropdown">
+<button class="btn">Año escolar ▼</button>
+<div class="dropdown-content">
+<a href="#" onclick="cambiarInforme('https://app.powerbi.com/view?r=eyJrIjoiZWE0NjFhYWYtY2M5ZS00ZDQ4LWFiZDAtNmU1ZGZkYTVjNWViIiwidCI6IjY2ZTI4OThiLTJjMzUtNDMzZi1hNzUzLWJkNjRhY2EzOWFmYiIsImMiOjF9')">
+2025-2026
+</a>
+<span>2026-2027 (próximamente)</span>
+</div>
+</div>
+
 <!-- PRUEBAS -->
 <div class="dropdown">
-<button class="btn" onclick="toggleMenu('menuPruebas')">
-Pruebas y rúbricas ▼
-</button>
-
-<div id="menuPruebas" class="dropdown-content">
+<button class="btn">Pruebas y rúbricas ▼</button>
+<div class="dropdown-content">
 <a href="https://drive.google.com/drive/folders/1DVgvr8SuIApyFKk2kQUaZjy2c736xGZh?usp=drive_link" target="_blank">Septiembre</a>
 <a href="https://drive.google.com/drive/folders/1mHf3_gLi4ZIj_YLRPB0-CYh0b_Y1CMWV?usp=drive_link" target="_blank">Noviembre</a>
 <a href="https://drive.google.com/drive/folders/1JP1DCceZfuHuNL4FxIySqalPvCh36SAb?usp=drive_link" target="_blank">Marzo</a>
-<span>Mayo (próximamente)</span>
+<span>Mayo</span>
 </div>
 </div>
 
 <!-- SISTEMATIZACIÓN -->
 <div class="dropdown">
-<button class="btn" onclick="toggleMenu('menuSistematizacion')">
-Sistematización de centros ▼
-</button>
-
-<div id="menuSistematizacion" class="dropdown-content">
+<button class="btn">Sistematización ▼</button>
+<div class="dropdown-content">
 <a href="https://lookerstudio.google.com/reporting/8b050392-1c17-4511-be16-64a07323885e" target="_blank">Septiembre</a>
 <a href="https://lookerstudio.google.com/reporting/60bb48a6-a3df-45d9-ae1f-2a2272081fe4" target="_blank">Noviembre</a>
 <a href="https://lookerstudio.google.com/reporting/60bb48a6-a3df-45d9-ae1f-2a2272081fe4" target="_blank">Marzo</a>
-<span>Mayo (próximamente)</span>
 </div>
 </div>
 
 <!-- FORMULARIOS -->
 <div class="dropdown">
-<button class="btn" onclick="toggleMenu('menuFormularios')">
-Formularios ▼
-</button>
-
-<div id="menuFormularios" class="dropdown-content">
+<button class="btn">Formularios ▼</button>
+<div class="dropdown-content">
 <a href="https://docs.google.com/forms/d/e/1FAIpQLSeKe12G3Xwn3i0RH13EwP58DYFypbSxQHjCDETkz7i26g5XQA/viewform" target="_blank">Primer ciclo</a>
 <a href="https://forms.gle/VhKJqGCeXighPDQWA" target="_blank">Segundo ciclo</a>
 </div>
@@ -229,7 +185,9 @@ Formularios ▼
 
 <main>
 <div class="report-container">
-<iframe src="https://app.powerbi.com/view?r=eyJrIjoiZWE0NjFhYWYtY2M5ZS00ZDQ4LWFiZDAtNmU1ZGZkYTVjNWViIiwidCI6IjY2ZTI4OThiLTJjMzUtNDMzZi1hNzUzLWJkNjRhY2EzOWFmYiIsImMiOjF9"></iframe>
+<iframe id="visorInforme"
+src="https://app.powerbi.com/view?r=eyJrIjoiZWE0NjFhYWYtY2M5ZS00ZDQ4LWFiZDAtNmU1ZGZkYTVjNWViIiwidCI6IjY2ZTI4OThiLTJjMzUtNDMzZi1hNzUzLWJkNjRhY2EzOWFmYiIsImMiOjF9">
+</iframe>
 </div>
 </main>
 
@@ -238,20 +196,9 @@ Formularios ▼
 </footer>
 
 <script>
-function toggleMenu(id) {
-    document.querySelectorAll('.dropdown-content').forEach(menu => {
-        if (menu.id !== id) menu.classList.remove('show');
-    });
-    document.getElementById(id).classList.toggle('show');
+function cambiarInforme(url) {
+    document.getElementById("visorInforme").src = url;
 }
-
-window.onclick = function(e) {
-    if (!e.target.closest('.dropdown')) {
-        document.querySelectorAll('.dropdown-content').forEach(menu => {
-            menu.classList.remove('show');
-        });
-    }
-};
 </script>
 
 </body>
