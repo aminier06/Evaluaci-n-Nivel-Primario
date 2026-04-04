@@ -25,7 +25,7 @@ header.membrete {
     margin: 0 auto;
 }
 
-/* TÍTULO EN DOS LÍNEAS */
+/* TÍTULO */
 .titulo-sistema {
     font-weight: 800;
     color: #003366;
@@ -72,13 +72,17 @@ header.membrete {
     padding: 0.7rem 1.3rem;
     border-radius: 8px;
     cursor: pointer;
-    border: none;
+    border: 1px solid #004578;
+    background: #004578;
+    color: #fff;
+    transition: background 0.2s ease;
 }
 
-.btn-principal { background: #004578; color: #fff; }
-.btn-secundario { background: #fff; color: #004578; border: 1px solid #004578; }
-.btn-form { background: #1f7a3a; color: #fff; }
+.btn:hover {
+    background: #005a9e;
+}
 
+/* DROPDOWN */
 .dropdown {
     position: relative;
 }
@@ -186,7 +190,7 @@ Resultados de Evaluaciones Diagnóstica y de Seguimiento – 2025-2026
 
 <!-- PRUEBAS -->
 <div class="dropdown">
-<button class="btn btn-principal" onclick="toggleMenu('menuPruebas')">
+<button class="btn" onclick="toggleMenu('menuPruebas')">
 Pruebas y rúbricas ▼
 </button>
 
@@ -200,7 +204,7 @@ Pruebas y rúbricas ▼
 
 <!-- SISTEMATIZACIÓN -->
 <div class="dropdown">
-<button class="btn btn-secundario" onclick="toggleMenu('menuSistematizacion')">
+<button class="btn" onclick="toggleMenu('menuSistematizacion')">
 Sistematización de centros ▼
 </button>
 
@@ -214,7 +218,7 @@ Sistematización de centros ▼
 
 <!-- FORMULARIOS -->
 <div class="dropdown">
-<button class="btn btn-form" onclick="toggleMenu('menuFormularios')">
+<button class="btn" onclick="toggleMenu('menuFormularios')">
 Formularios ▼
 </button>
 
