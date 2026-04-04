@@ -86,7 +86,7 @@ header.membrete {
 }
 
 .dropdown-content {
-    display: block;
+    display: none;
     position: absolute;
     background: #fff;
     min-width: 260px;
@@ -94,22 +94,14 @@ header.membrete {
     box-shadow: 0 6px 14px rgba(0,0,0,0.12);
     margin-top: 6px;
     z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(5px);
-    transition: all 0.2s ease;
 }
 
 .dropdown:hover .dropdown-content {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+    display: block;
 }
 
 .dropdown-content.show {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
+    display: block;
 }
 
 .dropdown-content a,
@@ -174,6 +166,7 @@ iframe {
 @media (max-width: 900px) {
     .titulo-linea1 { font-size: 1.2rem; }
     .titulo-linea2 { font-size: 1.5rem; }
+
     .dropdown-content {
         min-width: 220px;
     }
@@ -199,13 +192,13 @@ iframe {
         <div class="subtitulo-inst">Viceministerio de Servicios Técnicos y Pedagógicos</div>
         <div class="dependencia">Dirección de Educación Primaria</div>
 
-     </div>
+    </div>
 
     <div class="acciones">
 
         <!-- AÑO ESCOLAR -->
         <div class="dropdown">
-            <button class="btn" onclick="toggleMenu('menuAnio')">
+            <button type="button" class="btn" onclick="toggleMenu('menuAnio', event)">
                 Año escolar ▼
             </button>
             <div id="menuAnio" class="dropdown-content">
@@ -216,7 +209,7 @@ iframe {
 
         <!-- PRUEBAS -->
         <div class="dropdown">
-            <button class="btn" onclick="toggleMenu('menuPruebas')">
+            <button type="button" class="btn" onclick="toggleMenu('menuPruebas', event)">
                 Pruebas y rúbricas ▼
             </button>
             <div id="menuPruebas" class="dropdown-content">
@@ -229,7 +222,7 @@ iframe {
 
         <!-- SISTEMATIZACIÓN -->
         <div class="dropdown">
-            <button class="btn" onclick="toggleMenu('menuSistematizacion')">
+            <button type="button" class="btn" onclick="toggleMenu('menuSistematizacion', event)">
                 Sistematización de centros ▼
             </button>
             <div id="menuSistematizacion" class="dropdown-content">
@@ -242,7 +235,7 @@ iframe {
 
         <!-- FORMULARIOS -->
         <div class="dropdown">
-            <button class="btn" onclick="toggleMenu('menuFormularios')">
+            <button type="button" class="btn" onclick="toggleMenu('menuFormularios', event)">
                 Formularios ▼
             </button>
             <div id="menuFormularios" class="dropdown-content">
@@ -287,7 +280,7 @@ const datosPorAnio = {
         sistematizacion: {
             septiembre: "https://lookerstudio.google.com/reporting/8b050392-1c17-4511-be16-64a07323885e",
             noviembre: "https://lookerstudio.google.com/reporting/60bb48a6-a3df-45d9-ae1f-2a2272081fe4",
-            marzo: "https://lookerstudio.google.com/reporting/60bb48a6-a3df-45d9-ae1f-2a2272081fe4",
+            marzo: "https://lookerstudio.google.com/reporting/37283302-62a8-4a76-836d-2e484c186884",
             mayo: ""
         },
         formularios: {
@@ -342,7 +335,7 @@ function abrirRecurso(tipo, mes) {
     if (url) {
         window.open(url, "_blank", "noopener,noreferrer");
     } else {
-        alert("El recurso de " + capitalizar(mes) + " para " + tipo.replace("sistematizacion", "sistematización") + " del año escolar " + anioSeleccionado + " aún no está disponible.");
+        alert("El recurso de " + capitalizar(mes) + " para " + nombreTipo(tipo) + " del año escolar " + anioSeleccionado + " aún no está disponible.");
     }
 
     cerrarMenus();
@@ -361,16 +354,29 @@ function abrirFormulario(ciclo) {
     cerrarMenus();
 }
 
+function nombreTipo(tipo) {
+    if (tipo === "pruebas") return "pruebas y rúbricas";
+    if (tipo === "sistematizacion") return "sistematización de centros";
+    return tipo;
+}
+
 function capitalizar(texto) {
     return texto.charAt(0).toUpperCase() + texto.slice(1);
 }
 
-function toggleMenu(id) {
-    document.querySelectorAll('.dropdown-content').forEach(menu => {
-        if (menu.id !== id) menu.classList.remove('show');
-    });
+function toggleMenu(id, event) {
+    if (event) {
+        event.stopPropagation();
+    }
 
-    document.getElementById(id).classList.toggle('show');
+    const menu = document.getElementById(id);
+    const estabaAbierto = menu.classList.contains('show');
+
+    cerrarMenus();
+
+    if (!estabaAbierto) {
+        menu.classList.add('show');
+    }
 }
 
 function cerrarMenus() {
@@ -379,11 +385,11 @@ function cerrarMenus() {
     });
 }
 
-window.onclick = function(e) {
+document.addEventListener('click', function(e) {
     if (!e.target.closest('.dropdown')) {
         cerrarMenus();
     }
-};
+});
 </script>
 
 </body>
