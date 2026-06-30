@@ -1271,7 +1271,7 @@ let selectedPeriod=''; // Se asignará al periodo más reciente en init(). Use '
 const orderPeriod=['Septiembre','Noviembre','Marzo','Mayo'], orderArea=['Lengua Española','Matemática','Ciencias Sociales','Ciencias de la Naturaleza'], orderGrade=[1,2,3,4,5,6], gradeName={1:'Primero',2:'Segundo',3:'Tercero',4:'Cuarto',5:'Quinto',6:'Sexto'};
 const readOrder=['Lector de imágenes','Lector de sílabas','Lector de palabras','Lector no fluido','Lector fluido'];
 let DATA,D,PERF_BASE=[],PERF_COMP=[],PERF_IND=null,READ,COV,charts={},current={},IND_LOADING=false;
-function fmt(n){return Math.round(n||0).toLocaleString('es-DO')} function pct(n,d){return d?100*n/d:0} function pctf(x){return (x||0).toFixed(2)+'%'} function idText(id){return (typeof id==='number' && D && D[id]!==undefined)?D[id]:String(id===null||id===undefined?'':id)}
+function fmt(n){return Math.round(n||0).toLocaleString('es-DO')} function fmtEv(n){return n==null?'—':fmt(n)} function pct(n,d){return d?100*n/d:0} function pctf(x){return (x||0).toFixed(2)+'%'} function idText(id){return (typeof id==='number' && D && D[id]!==undefined)?D[id]:String(id===null||id===undefined?'':id)}
 function parseGrade(v){
   if(typeof v==='number'&&v>=1&&v<=6)return v;
   let t=(typeof v==='number'&&D&&D[v]!==undefined)?D[v]:String(v||'');
@@ -2099,6 +2099,52 @@ function nivelesComparacionGradoArea(amb, fExport, grado, area, periodo){
 // A partir de los grado-área ya calculados (gradosAreaPropios), identifica las
 // combinaciones con mayor índice de priorización (más atención) y las de mejor
 // desempeño (fortalezas), usando únicamente el periodo más reciente disponible.
+// El número de "evaluados" de un área específica NO se obtiene sumando los
+// niveles de desempeño a nivel de área (Elemental+Aceptable+Satisfactorio),
+// porque esos datos están desagregados por competencia dentro de cada área:
+// un mismo estudiante puede aparecer varias veces (una por competencia
+// evaluada), lo que infla el conteo. Tampoco se obtiene desde la hoja de
+// cobertura, porque esta no distingue por área, y no todo estudiante
+// evaluado en un grado se evalúa necesariamente en todas sus áreas.
+// El criterio correcto: tomar, dentro de esa área, el primer indicador de
+// la primera competencia que sí tenga datos para ese grado específico
+// (algunas competencias del catálogo no aplican a todos los grados), y
+// sumar los niveles de desempeño únicamente de ese indicador. Como cada
+// estudiante responde una sola vez a un indicador dado, esa suma sí
+// corresponde al número real de evaluados en el área.
+function ordenCompIndDeArea(area){
+  const meta = DATA.meta||[];
+  const vistos = new Set();
+  const pares = [];
+  for(const r of meta){
+    if(idText(r[0])!==area) continue;
+    const comp = idText(r[1]), ind = idText(r[2]);
+    const key = comp+'||'+ind;
+    if(comp && ind && !vistos.has(key)){ vistos.add(key); pares.push({comp,ind}); }
+  }
+  return pares;
+}
+function evaluadosRealesArea(area, grado, periodo, fTerritorial){
+  if(!PERF_IND) return null;
+  const pares = ordenCompIndDeArea(area);
+  for(const {comp,ind} of pares){
+    const rows = PERF_IND.filter(r=>
+      idText(r[6])===periodo &&
+      gradeOf(r)===grado &&
+      idText(r[9])===area &&
+      idText(r[10])===comp &&
+      idText(r[11])===ind &&
+      matchBase(r, fTerritorial, false)
+    );
+    if(rows.length){
+      const m = aggLevels(rows,['Elemental','Aceptable','Satisfactorio'],12,13);
+      const tot = m.Elemental+m.Aceptable+m.Satisfactorio;
+      if(tot) return tot;
+    }
+  }
+  return null;
+}
+
 function fortalezasYPrioridades(gradosAreaPropios, periodoReciente){
   const combinaciones = [];
   gradosAreaPropios.forEach(g=>{
@@ -2541,6 +2587,10 @@ async function generarInformePDF(){
 
     // Se calcula aquí (antes del "Resumen del ámbito") porque tanto la lista de
     // fortalezas/prioridades como la tabla detallada de grado y área lo usan.
+    // ensureIndLoaded() solo descomprime datos ya cargados en la página (no
+    // hace peticiones de red); si los archivos de detalle no están presentes,
+    // se continúa sin el conteo de evaluados por área (se muestra '—').
+    const indDisponible = ensureIndLoaded();
     const gradosAreaPropios = orderGrade.map(g=>{
       const areas = orderArea.map(a=>{
         const porPeriodo = periodosDisponibles.map(p=>{
@@ -2549,7 +2599,11 @@ async function generarInformePDF(){
           const tot = (m.Elemental||0)+(m.Aceptable||0)+(m.Satisfactorio||0);
           if(!tot) return null;
           const pe=pct(m.Elemental,tot), ps=pct(m.Satisfactorio,tot);
-          return {periodo:p, ps, pa:pct(m.Aceptable,tot), pe, idxB:breachIndex(pe,ps), tot, ne:m.Elemental, na:m.Aceptable, ns:m.Satisfactorio};
+          // ev = evaluados reales del área (primer indicador de la primera
+          // competencia con datos para este grado). tot solo se usa como
+          // denominador interno de los porcentajes, no como conteo real.
+          const ev = indDisponible ? evaluadosRealesArea(a, g, p, fExport) : null;
+          return {periodo:p, ps, pa:pct(m.Aceptable,tot), pe, idxB:breachIndex(pe,ps), ev};
         });
         return {area:a, porPeriodo};
       }).filter(a=>a.porPeriodo.some(x=>x));
@@ -3106,12 +3160,12 @@ async function generarInformePDF(){
       if(prioridadesDestacadas.length){
         parrafo('Mayor prioridad:', 9.5);
         tabla(['Grado','Área','Evaluados','% Satisfactorio','Índice'],
-          prioridadesDestacadas.map(x=>[x.grado, x.area, fmt(x.tot), pctf(x.ps), x.idxB.toFixed(2)]), [1,1.4,0.9,1,0.7]);
+          prioridadesDestacadas.map(x=>[x.grado, x.area, fmtEv(x.ev), pctf(x.ps), x.idxB.toFixed(2)]), [1,1.4,0.9,1,0.7]);
       }
       if(fortalezasDestacadas.length){
         parrafo('Mejor desempeño:', 9.5);
         tabla(['Grado','Área','Evaluados','% Satisfactorio','Índice'],
-          fortalezasDestacadas.map(x=>[x.grado, x.area, fmt(x.tot), pctf(x.ps), x.idxB.toFixed(2)]), [1,1.4,0.9,1,0.7]);
+          fortalezasDestacadas.map(x=>[x.grado, x.area, fmtEv(x.ev), pctf(x.ps), x.idxB.toFixed(2)]), [1,1.4,0.9,1,0.7]);
       }
     }
 
@@ -3142,7 +3196,7 @@ async function generarInformePDF(){
           let primeraFilaArea = true;
           a.porPeriodo.forEach(x=>{
             if(!x) return;
-            filasGA.push([primeraFilaArea?a.area:'', x.periodo, fmt(x.tot), pctf(x.ps), pctf(x.pa), pctf(x.pe), x.idxB.toFixed(2)]);
+            filasGA.push([primeraFilaArea?a.area:'', x.periodo, fmtEv(x.ev), pctf(x.ps), pctf(x.pa), pctf(x.pe), x.idxB.toFixed(2)]);
             primeraFilaArea = false;
           });
         });
