@@ -3019,6 +3019,7 @@ async function generarInformePDF(){
     doc.text('Versión del generador del informe: v4 (tablas consolidadas por periodo, gráficos de línea)', marginX, y); y += 16;
     doc.setTextColor(20,35,63);
 
+    window.__PDF_SECCION_ACTUAL__ = 'Resumen del ámbito';
     titulo('Resumen del ámbito');
     parrafo(textoResumen(amb, stReciente, periodoReciente));
     if(periodosDisponibles.length){
@@ -3029,7 +3030,7 @@ async function generarInformePDF(){
         }), [1,1,1,1]);
     }
 
-
+    window.__PDF_SECCION_ACTUAL__ = 'Desempeño por grado y área';
     titulo('Desempeño por grado y área');
     parrafo('El desempeño se presenta siempre desagregado por grado y área; no se incluye un número general que mezcle resultados de grados o áreas distintas entre sí. Cada combinación de grado y área tiene su propia tabla y su propia gráfica de tendencia, incluyendo el índice de priorización.', 9.5);
 
@@ -3076,6 +3077,7 @@ async function generarInformePDF(){
       parrafo('No hay suficientes datos de desempeño para este ámbito con los filtros seleccionados.', 9.5);
     }
 
+    window.__PDF_SECCION_ACTUAL__ = 'Lectura por grado';
     titulo('Lectura por grado');
     parrafo('Los niveles de lectura se presentan siempre por grado (aplica solo a primero, segundo y tercer grado); no se incluye un número general que mezcle todos los grados.', 9.5);
     if(!soloSegundoCiclo){
@@ -3115,6 +3117,7 @@ async function generarInformePDF(){
       }
     }
 
+    window.__PDF_SECCION_ACTUAL__ = 'Tabla territorial de lectura';
     const lecturaTerritorial = lecturaTerritorialPorGradoEvolucion(amb, periodosDisponibles, readX);
     if(lecturaTerritorial && lecturaTerritorial.rows.length){
       titulo(`Niveles de lectura por ${lecturaTerritorial.label} y grado`, 11);
@@ -3138,6 +3141,7 @@ async function generarInformePDF(){
       }
     }
 
+    window.__PDF_SECCION_ACTUAL__ = 'Comparación con el nivel superior';
     const comparacionPeriodos = periodosDisponibles.map(p=>{
       const fP = {...fExport, periods:[p]};
       return {periodo:p, st: scopeStats(fP), niveles: statsNivelSuperior(fP, amb)};
@@ -3163,6 +3167,7 @@ async function generarInformePDF(){
       })), PALETA_CATEGORICA_PDF);
     }
 
+    window.__PDF_SECCION_ACTUAL__ = 'Tabla territorial de desempeño por grado y área';
     const gradoAreaTerritorial = desempenoGradoAreaTerritorialEvolucion(amb, periodosDisponibles, perfX);
     if(gradoAreaTerritorial && gradoAreaTerritorial.grupos.length){
       titulo(`Desempeño por grado y área según ${gradoAreaTerritorial.label}`);
@@ -3211,8 +3216,9 @@ async function generarInformePDF(){
     const nombreArchivo = `informe_sirev_${amb.tipo}_${String(amb.nombre||'nacional').replace(/[\/\\?*\[\]:]/g,'').slice(0,40)}_${fechaArchivo}.pdf`;
     doc.save(nombreArchivo);
   }catch(err){
-    console.error(err);
-    alert('No se pudo generar el informe: '+(err.message||err));
+    console.error('[SIREV PDF] Error en sección:', window.__PDF_SECCION_ACTUAL__||'(inicio)');
+    console.error('[SIREV PDF] Detalle:', err);
+    alert('No se pudo generar el informe: '+(err.message||err)+'\nSección: '+(window.__PDF_SECCION_ACTUAL__||'desconocida'));
   }finally{
     if(btn){ btn.disabled = false; btn.textContent = 'Descargar informe PDF'; }
   }
