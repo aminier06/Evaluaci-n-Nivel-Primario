@@ -2280,13 +2280,15 @@ function desempenoGradoAreaTerritorialEvolucion(amb, periodos, perf){
   const grupos = orderGrade.map(g=>{
     const byKey = byGrade.get(g);
     const rows = [];
-    const nByArea = nacionalByGrade.get(g);
-    if(nByArea){
-      const nRows = Array.from(nByArea.keys()).sort((a,b)=>{
-        const ia=orderArea.indexOf(a), ib=orderArea.indexOf(b);
-        return (ia<0?999:ia)-(ib<0?999:ib);
-      }).map(area=>['Nacional','Nacional', area, ...periodos.flatMap(p=>valoresPerf(nByArea.get(area).get(p)))]);
-      rows.push(...nRows);
+    if(amb.tipo==='nacional'){
+      const nByArea = nacionalByGrade.get(g);
+      if(nByArea){
+        const nRows = Array.from(nByArea.keys()).sort((a,b)=>{
+          const ia=orderArea.indexOf(a), ib=orderArea.indexOf(b);
+          return (ia<0?999:ia)-(ib<0?999:ib);
+        }).map(area=>['Nacional','Nacional', area, ...periodos.flatMap(p=>valoresPerf(nByArea.get(area).get(p)))]);
+        rows.push(...nRows);
+      }
     }
     if(!byKey) return {grado:`${g}.º`, rows};
 
