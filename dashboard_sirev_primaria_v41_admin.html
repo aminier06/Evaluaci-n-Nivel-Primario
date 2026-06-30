@@ -2587,10 +2587,6 @@ async function generarInformePDF(){
 
     // Se calcula aquí (antes del "Resumen del ámbito") porque tanto la lista de
     // fortalezas/prioridades como la tabla detallada de grado y área lo usan.
-    // ensureIndLoaded() solo descomprime datos ya cargados en la página (no
-    // hace peticiones de red); si los archivos de detalle no están presentes,
-    // se continúa sin el conteo de evaluados por área (se muestra '—').
-    const indDisponible = ensureIndLoaded();
     const gradosAreaPropios = orderGrade.map(g=>{
       const areas = orderArea.map(a=>{
         const porPeriodo = periodosDisponibles.map(p=>{
@@ -2599,11 +2595,7 @@ async function generarInformePDF(){
           const tot = (m.Elemental||0)+(m.Aceptable||0)+(m.Satisfactorio||0);
           if(!tot) return null;
           const pe=pct(m.Elemental,tot), ps=pct(m.Satisfactorio,tot);
-          // ev = evaluados reales del área (primer indicador de la primera
-          // competencia con datos para este grado). tot solo se usa como
-          // denominador interno de los porcentajes, no como conteo real.
-          const ev = indDisponible ? evaluadosRealesArea(a, g, p, fExport) : null;
-          return {periodo:p, ps, pa:pct(m.Aceptable,tot), pe, idxB:breachIndex(pe,ps), ev};
+          return {periodo:p, ps, pa:pct(m.Aceptable,tot), pe, idxB:breachIndex(pe,ps)};
         });
         return {area:a, porPeriodo};
       }).filter(a=>a.porPeriodo.some(x=>x));
@@ -3159,13 +3151,13 @@ async function generarInformePDF(){
       parrafo(`A partir de ${periodoReciente || 'el periodo más reciente'}, estas son las combinaciones de grado y área que requieren más atención, y las que muestran mejor desempeño dentro de este ámbito.`, 9.5);
       if(prioridadesDestacadas.length){
         parrafo('Mayor prioridad:', 9.5);
-        tabla(['Grado','Área','Evaluados','% Satisfactorio','Índice'],
-          prioridadesDestacadas.map(x=>[x.grado, x.area, fmtEv(x.ev), pctf(x.ps), x.idxB.toFixed(2)]), [1,1.4,0.9,1,0.7]);
+        tabla(['Grado','Área','% Satisfactorio','Índice'],
+          prioridadesDestacadas.map(x=>[x.grado, x.area, pctf(x.ps), x.idxB.toFixed(2)]), [1,1.6,1,0.7]);
       }
       if(fortalezasDestacadas.length){
         parrafo('Mejor desempeño:', 9.5);
-        tabla(['Grado','Área','Evaluados','% Satisfactorio','Índice'],
-          fortalezasDestacadas.map(x=>[x.grado, x.area, fmtEv(x.ev), pctf(x.ps), x.idxB.toFixed(2)]), [1,1.4,0.9,1,0.7]);
+        tabla(['Grado','Área','% Satisfactorio','Índice'],
+          fortalezasDestacadas.map(x=>[x.grado, x.area, pctf(x.ps), x.idxB.toFixed(2)]), [1,1.6,1,0.7]);
       }
     }
 
@@ -3177,11 +3169,11 @@ async function generarInformePDF(){
         const rows = perfX.filter(r=>idText(r[6])===periodoReciente && idText(r[5])===t);
         const m = aggLevels(rows,['Elemental','Aceptable','Satisfactorio'],12,13);
         const tot = m.Elemental+m.Aceptable+m.Satisfactorio;
-        if(!tot) return [t, '—','—','—','—'];
+        if(!tot) return [t, '—','—','—'];
         const pe=pct(m.Elemental,tot), ps=pct(m.Satisfactorio,tot);
-        return [t, fmt(tot), pctf(ps), pctf(pct(m.Aceptable,tot)), pctf(pe)];
+        return [t, pctf(ps), pctf(pct(m.Aceptable,tot)), pctf(pe)];
       });
-      tabla(['Tanda','Evaluados','% Satisfactorio','% Aceptable','% Elemental'], filasTanda, [1.2,0.9,1,1,1]);
+      tabla(['Tanda','% Satisfactorio','% Aceptable','% Elemental'], filasTanda, [1.4,1,1,1]);
     }
 
     window.__PDF_SECCION_ACTUAL__ = 'Desempeño por grado y área';
@@ -3196,11 +3188,11 @@ async function generarInformePDF(){
           let primeraFilaArea = true;
           a.porPeriodo.forEach(x=>{
             if(!x) return;
-            filasGA.push([primeraFilaArea?a.area:'', x.periodo, fmtEv(x.ev), pctf(x.ps), pctf(x.pa), pctf(x.pe), x.idxB.toFixed(2)]);
+            filasGA.push([primeraFilaArea?a.area:'', x.periodo, pctf(x.ps), pctf(x.pa), pctf(x.pe), x.idxB.toFixed(2)]);
             primeraFilaArea = false;
           });
         });
-        tabla(['Área','Periodo','Evaluados','% Satisfactorio','% Aceptable','% Elemental','Índice'], filasGA, [1.3,0.9,0.8,0.9,0.9,0.9,0.7]);
+        tabla(['Área','Periodo','% Satisfactorio','% Aceptable','% Elemental','Índice'], filasGA, [1.4,1,0.9,0.9,0.9,0.7]);
 
         g.areas.forEach(a=>{
           const conDatos = a.porPeriodo.filter(x=>x);
