@@ -1341,8 +1341,6 @@ async function loadData(){
     loadMsg('Descomprimiendo datos principales...');
     DATA=decodeB64Gz(window.SIREV_CORE_B64);
     // Exponer referencias para módulos externos como dashboard_mayo_v41.js.
-    // Las variables locales siguen siendo las usadas por el dashboard; window.DATA
-    // permite que el módulo de mayo detecte que la inicialización ya ocurrió.
     window.DATA = DATA;
     D=DATA.dict; PERF_BASE=DATA.perf_base||[]; PERF_COMP=DATA.perf_comp||[]; READ=DATA.read; COV=DATA.cov;
     window.D = D;
@@ -1350,8 +1348,22 @@ async function loadData(){
     window.PERF_COMP = PERF_COMP;
     window.READ = READ;
     window.COV = COV;
-    document.getElementById('loading').style.display='none';
+    // Inicializar el dashboard pero mantener la pantalla de carga visible mientras
+    // dashboard_mayo_v41.js descarga e integra los datos de mayo desde Google Sheets.
+    // Cuando el módulo termine, establece window.__SIREV_MAYO_READY__ = true y luego
+    // la pantalla de carga se oculta — así nunca se ve el "flash" de Marzo.
     init();
+    loadMsg('Cargando datos de Mayo...');
+    await new Promise(resolve=>{
+      if(window.__SIREV_MAYO_READY__){ resolve(); return; }
+      const start=Date.now();
+      const poll=()=>{
+        if(window.__SIREV_MAYO_READY__ || Date.now()-start>15000){ resolve(); return; }
+        setTimeout(poll, 150);
+      };
+      poll();
+    });
+    document.getElementById('loading').style.display='none';
   }catch(err){
     console.error(err);
     showLoadError(err.message || String(err));
