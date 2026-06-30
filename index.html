@@ -616,20 +616,15 @@ iframe{
 
             <div class="admin-field full" style="margin-top:14px;border-top:1px solid #e2e8f0;padding-top:14px;">
                 <label for="adminPublishPass">Publicar para todos los visitantes</label>
-                <small>Esto sube el cambio directamente al repositorio de GitHub. Pide una clave distinta a la del panel — esa clave nunca está escrita en este archivo, solo tú la conoces.</small>
                 <input id="adminPublishPass" type="password" placeholder="Clave de publicación" style="margin-top:6px;max-width:260px;">
                 <div class="admin-actions" style="margin-top:8px;">
                     <button class="admin-action primary" onclick="publicarConfigAdmin()">Publicar para todos</button>
-                    <button class="admin-action" onclick="generarCodigoAdmin()">Generar código (manual, por si falla lo anterior)</button>
+                    <button class="admin-action" onclick="generarCodigoAdmin()">Generar código</button>
                 </div>
                 <div id="adminPublishStatus" class="admin-status" aria-live="polite"></div>
             </div>
 
             <div id="adminExportBox" class="admin-field full" style="display:none;margin-top:10px;">
-                <label for="adminExportTextarea">Código para pegar en el archivo (reemplaza la configuración publicada para todos)</label>
-                <small>
-                    1) Copia este texto. 2) En el código del sitio, busca la línea <code>const adminDefaults = ...</code> (puede ser la llamada a la función o un objeto ya pegado antes) y reemplázala por <code>const adminDefaults = </code> seguido de este texto y un punto y coma. 3) Sube el archivo a GitHub.
-                </small>
                 <textarea id="adminExportTextarea" readonly rows="10" style="width:100%;margin-top:8px;font-family:monospace;font-size:12.5px;"></textarea>
                 <div class="admin-actions" style="margin-top:8px;">
                     <button class="admin-action primary" onclick="copiarCodigoAdmin()">Copiar al portapapeles</button>
@@ -690,7 +685,7 @@ const ADMIN_SESSION_KEY = "sirevPrimariaAdminSession";
 const ADMIN_USER = "admin";
 const ADMIN_PASS = "Sirev2026*";
 // Reemplaza esta URL por la de tu función de Supabase una vez la despliegues.
-const SUPABASE_FUNCTION_URL = "https://TU-PROYECTO.functions.supabase.co/publicar-config-sirev";
+const SUPABASE_FUNCTION_URL = "https://sikqxdzsjjqyqhcfihjp.supabase.co/functions/v1/publicar-config-sirev";
 const FORMULARIOS_FIJOS = {
     primerCiclo: "formulario_primer_ciclo.html",
     segundoCiclo: "formulario_segundo_ciclo.html"
@@ -963,7 +958,7 @@ async function publicarConfigAdmin() {
         });
         const data = await resp.json().catch(() => ({}));
         if (resp.ok && data.ok) {
-            status.textContent = "Publicado. El sitio puede tardar uno o dos minutos en reflejar el cambio para todos.";
+            status.textContent = "Publicado correctamente.";
             claveInput.value = "";
         } else {
             status.textContent = "No se pudo publicar: " + (data.error || ("Error " + resp.status));
