@@ -692,7 +692,67 @@ const FORMULARIOS_FIJOS = {
     segundoCiclo: "formulario_segundo_ciclo.html"
 };
 const MARCO_EVALUACION_URL = "https://drive.google.com/file/d/1c_vFWAbGmbTYObQ4g4GnkXcWxz2h2BGW/view?usp=drive_link";
-const adminDefaults = construirConfigAdminBase();
+const adminDefaults = {
+  "years": {
+    "2025-2026": {
+      "dashboardUrl": "dashboard_sirev_primaria_v41_admin.html?v=46",
+      "powerBiUrl": "https://app.powerbi.com/view?r=eyJrIjoiZWE0NjFhYWYtY2M5ZS00ZDQ4LWFiZDAtNmU1ZGZkYTVjNWViIiwidCI6IjY2ZTI4OThiLTJjMzUtNDMzZi1hNzUzLWJkNjRhY2EzOWFmYiIsImMiOjF9",
+      "pruebas": {
+        "septiembre": "https://drive.google.com/drive/folders/1DVgvr8SuIApyFKk2kQUaZjy2c736xGZh",
+        "noviembre": "https://drive.google.com/drive/folders/1mHf3_gLi4ZIj_YLRPB0-CYh0b_Y1CMWV",
+        "marzo": "https://drive.google.com/drive/folders/1JP1DCceZfuHuNL4FxIySqalPvCh36SAb",
+        "mayo": "https://drive.google.com/drive/folders/1eBhnLyXc9YpKIeE9_kkhD18JwLmMknGm?usp=drive_link"
+      },
+      "sistematizacion": {
+        "septiembre": "https://aminier06.github.io/sistematizacionsept-nov-mar/?mes=septiembre",
+        "noviembre": "https://aminier06.github.io/sistematizacionsept-nov-mar/?mes=noviembre",
+        "marzo": "https://aminier06.github.io/sistematizacionsept-nov-mar/?mes=marzo",
+        "mayo": "monitoreo_sistematizacion_admin.html"
+      },
+      "pcUrl": "",
+      "scUrl": "",
+      "deadlineIso": "2026-06-12T14:00:00-04:00"
+    },
+    "2026-2027": {
+      "dashboardUrl": "",
+      "powerBiUrl": "",
+      "pruebas": {
+        "septiembre": "",
+        "noviembre": "",
+        "marzo": "",
+        "mayo": ""
+      },
+      "sistematizacion": {
+        "septiembre": "",
+        "noviembre": "",
+        "marzo": "",
+        "mayo": ""
+      },
+      "pcUrl": "",
+      "scUrl": "",
+      "deadlineIso": ""
+    },
+    "2024-2025": {
+      "dashboardUrl": "",
+      "powerBiUrl": "",
+      "pruebas": {
+        "septiembre": "",
+        "noviembre": "",
+        "marzo": "",
+        "mayo": ""
+      },
+      "sistematizacion": {
+        "septiembre": "",
+        "noviembre": "",
+        "marzo": "",
+        "mayo": ""
+      },
+      "pcUrl": "",
+      "scUrl": "",
+      "deadlineIso": ""
+    }
+  }
+};
 let adminConfig = cargarConfigAdmin();
 let anioAdminSeleccionado = anioSeleccionado;
 
