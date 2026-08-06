@@ -421,6 +421,17 @@
       return;
     }
 
+    // La guardia va AQUÍ, después de waitForDashboardReady(), porque es el
+    // momento en que loadData() ya terminó y __SIREV_CSV_MODE__ ya está activo.
+    // Si está en modo CSV, todos los periodos (incluido Mayo) ya se cargaron
+    // desde las hojas configuradas por año — este módulo no debe tocar nada.
+    if (window.__SIREV_CSV_MODE__) {
+      console.info('[SIREV Mayo] Modo CSV activo — módulo desactivado para este año.');
+      window.__SIREV_MAYO_READY__ = true;
+      window.__SIREV_MAYO_INTEGRATING__ = false;
+      return;
+    }
+
     console.info('[SIREV Mayo] Dashboard listo. Cargando CSVs...');
 
     const [p1, p2] = await Promise.all([
