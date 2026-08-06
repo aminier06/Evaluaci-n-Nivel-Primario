@@ -19,7 +19,30 @@
 <script src="dashboard_data_ind_v41_part2.js?v=41"></script>
 <script src="dashboard_data_ind_v41_part3.js?v=41"></script>
 <script src="dashboard_data_ind_v41_part4.js?v=41"></script>
-<script src="dashboard_mayo_v41.js?v=46"></script>
+<script>
+// El módulo de Mayo solo se necesita en modo compilado (año 2025-2026).
+// En modo CSV, todos los periodos ya están en las hojas configuradas.
+// Se decide aquí, ANTES de cargar el módulo, leyendo el localStorage
+// que aplicarConfigAdmin() ya escribió con la config del año activo.
+(function(){
+  var esModoCSV = false;
+  try {
+    var cfg = JSON.parse(localStorage.getItem('sirevDashboardUrls') || '{}');
+    var per = cfg.periodos || {};
+    esModoCSV = Object.values(per).some(function(p){ return p && (p.pc || p.sc); });
+  } catch(e) {}
+  if (!esModoCSV) {
+    // Modo compilado: cargar el módulo de Mayo normalmente
+    var s = document.createElement('script');
+    s.src = 'dashboard_mayo_v41.js?v=46';
+    document.head.appendChild(s);
+  } else {
+    // Modo CSV: señalar al dashboard que Mayo ya está integrado
+    window.__SIREV_MAYO_READY__ = true;
+    console.info('[SIREV] Modo CSV — módulo de Mayo no cargado.');
+  }
+})();
+</script>
 <style>
 :root{--azul:#003B71;--azul2:#005DAA;--rojo:#1E96F2;--dorado:#20279A;--verde:#E8693B;--cyan:#790987;--fondo:#f3f7fc;--panel:#fff;--borde:#c8d8ea;--texto:#10233f;--muted:#53657d;--shadow:0 12px 28px rgba(0,59,113,.10);--r:18px}
 *{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#f9fcff 0%,#eef4fb 100%);color:var(--texto);font-family:Segoe UI,Arial,sans-serif;font-size:14px;line-height:1.45} button,select,input{font-family:inherit} header{position:relative;z-index:30;background:linear-gradient(135deg,#fff 0%,#f4f8ff 52%,#e6f0fb 100%);border-bottom:4px solid var(--azul);box-shadow:0 10px 28px rgba(0,59,113,.13);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}.title h1{margin:0;color:var(--azul);font-size:22px;line-height:1.1}.sub{font-size:13px;color:#49627f;margin-top:3px}.top-filters{display:grid;grid-template-columns:repeat(2,minmax(190px,1fr));gap:8px 12px;min-width:440px}.tf label, aside label{display:block;color:var(--azul);text-transform:uppercase;font-size:10px;font-weight:800;letter-spacing:.06em;margin-bottom:4px}select,input{width:100%;background:#fff;color:var(--texto);border:1px solid #b8cce2;border-radius:12px;padding:9px 11px;outline:none}select:focus,input:focus{border-color:var(--azul2);box-shadow:0 0 0 3px rgba(0,93,170,.15)}.layout{display:grid;grid-template-columns:285px minmax(0,1fr);min-height:calc(100vh - 78px)}aside{position:relative;top:auto;height:auto;overflow:visible;background:linear-gradient(180deg,#fff,#f0f6fd);border-right:1px solid var(--borde);box-shadow:8px 0 22px rgba(0,59,113,.06);padding:18px 14px}aside label{margin-top:14px}.center-filter{position:relative}.suggestions{display:none;position:absolute;left:0;right:0;top:100%;z-index:50;background:#fff;border:1px solid var(--borde);border-radius:12px;box-shadow:0 12px 28px rgba(0,59,113,.18);max-height:260px;overflow:auto}.suggestions.open{display:block}.suggestion{padding:9px 10px;border-bottom:1px solid #d8e4f1;cursor:pointer}.suggestion:hover{background:#eef4fb}.suggestion b{color:var(--azul)}.suggestion small{display:block;color:var(--muted);margin-top:2px}main{padding:18px;min-width:0}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;position:static;z-index:20;background:linear-gradient(180deg,rgba(243,247,252,.98),rgba(243,247,252,.86));padding:8px 0}.tab{background:#fff;border:1px solid var(--borde);color:#31516f;border-radius:14px;padding:10px 16px;font-weight:800;cursor:pointer;box-shadow:0 6px 16px rgba(0,59,113,.08)}.tab.active{background:linear-gradient(135deg,var(--azul),var(--azul2));color:#fff;border-color:var(--azul)}.pane{display:none}.pane.active{display:block}.section,.card-block{background:#fff;border:1px solid var(--borde);border-radius:var(--r);box-shadow:var(--shadow);margin-bottom:16px;overflow:hidden}.section h2,.card-block h3{margin:0;background:linear-gradient(90deg,var(--azul),var(--azul2));color:#fff;padding:13px 16px;font-size:15px}.body{padding:12px 14px 10px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}.coverage{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;padding:14px}.cov-card{background:linear-gradient(145deg,#fff,#f4f8ff);border:1px solid var(--borde);border-radius:16px;padding:14px 16px;min-height:88px;border-left:5px solid var(--azul)}.cov-card small{display:block;color:var(--azul);text-transform:uppercase;font-size:11px;font-weight:850;margin-bottom:6px}.cov-card .val{font-size:27px;font-weight:900;color:var(--azul);line-height:1.05}.cov-card .det{font-size:12px;color:var(--muted);margin-top:6px}.donut-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}canvas{max-width:100%;height:250px!important;display:block}.donut-row canvas{height:240px!important}.chart-empty{padding:28px;text-align:center;color:var(--muted);font-weight:700}table{width:100%;border-collapse:collapse;font-size:12px}th,td{padding:9px 10px;border-bottom:1px solid #d8e4f1;text-align:left;white-space:nowrap}th{position:sticky;top:0;background:var(--azul);color:#fff;text-transform:uppercase;font-size:11px;z-index:1}tr:hover td{background:#eef4fb}.tablewrap{max-height:560px;overflow:auto}.right{text-align:center}.red{color:var(--rojo)}.amber{color:var(--dorado)}.green{color:var(--verde)}.cyan{color:var(--cyan)}.buttons{display:grid;gap:9px;margin-top:16px}button.secondary{background:#fff;border:1px solid var(--borde);color:var(--azul);border-radius:12px;padding:10px 13px;font-weight:800;cursor:pointer}.loading{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#f3f7fc;z-index:2000;color:var(--azul);font-size:18px;font-weight:800}.matrix-shell{width:100%;overflow-x:hidden;border:1px solid var(--borde);border-radius:16px;background:#fff}.matrix-row{display:grid;align-items:stretch;border-bottom:1px solid #d8e4f1}.matrix-perf .matrix-row{grid-template-columns:minmax(280px,1.7fr) minmax(110px,.7fr) repeat(3,minmax(110px,.6fr))}.matrix-read .matrix-row{grid-template-columns:minmax(230px,1.5fr) minmax(90px,.55fr) repeat(5,minmax(82px,.5fr))}.matrix-row>div{padding:9px 10px;border-left:1px solid #d8e4f1;min-width:0;overflow:hidden;text-overflow:ellipsis}.matrix-row>div:first-child{border-left:0}.matrix-head{background:var(--azul);color:#fff;font-size:10px;text-transform:uppercase;font-weight:850}.matrix-head>div{cursor:pointer;user-select:none;align-items:center;gap:6px}.matrix-head>div:hover{background:#0064ad}.matrix-head .sortmark{font-size:10px;margin-left:4px;opacity:.9}.matrix-head .unsorted{opacity:.45}.mx{margin:0;border:0}.mx summary{list-style:none;cursor:pointer}.mx summary::-webkit-details-marker{display:none}.mx-reg>summary{background:#e4effa;color:var(--azul);font-weight:850}.mx-dist>summary{background:#f4f8ff;color:#1b385f;font-weight:760}.mx-center{background:#fff;color:var(--texto)}.inst:before{content:'▸';margin-right:6px;color:var(--azul)}details[open]>summary .inst:before{content:'▾'}.mx-center .inst:before{content:''}.mx-dist .inst{padding-left:22px}.mx-center .inst{padding-left:44px;font-size:11.5px}.metric{text-align:right}.metric .num{font-weight:850;color:var(--azul)}.bar{height:6px;background:#d6e3f2;border-radius:999px;overflow:hidden;margin-top:4px}.fill{height:100%;border-radius:999px}.status{border-radius:999px;padding:5px 10px;font-size:11px;font-weight:800;display:inline-flex;align-items:center;justify-content:center;min-width:112px}.high{background:rgba(46,125,50,.13);color:var(--verde)}.mid{background:rgba(242,169,0,.18);color:#8a6100}.low{background:rgba(200,16,46,.12);color:var(--rojo)}.note{font-size:12px;color:var(--muted);margin:6px 0 14px}@media(max-width:980px){header{display:block}.top-filters{min-width:0;margin-top:12px}.layout{grid-template-columns:1fr}aside{position:relative;top:0;height:auto}.grid2,.donut-row{grid-template-columns:1fr}.coverage{grid-template-columns:repeat(2,minmax(0,1fr))}.tabs{position:static}.matrix-read .matrix-row{grid-template-columns:minmax(180px,1.4fr) minmax(70px,.5fr) repeat(5,minmax(65px,.45fr));font-size:11px}}
@@ -1325,6 +1348,185 @@ function loadExternalScript(url){
     document.head.appendChild(s);
   });
 }
+// ── CARGADOR CSV (años distintos a 2025-2026) ─────────────────────────
+const CSV_AREA  = {LE:'Lengua Española',MA:'Matemática',CS:'Ciencias Sociales',CN:'Ciencias de la Naturaleza'};
+const CSV_READ  = {N1:'Lector de imágenes',N2:'Lector de sílabas',N3:'Lector de palabras',N4:'Lector no fluido',N5:'Lector fluido'};
+const CSV_NIVEL = {S:'Satisfactorio',A:'Aceptable',E:'Elemental'};
+const CSV_GRADO = {'1ro':1,'2do':2,'3ro':3,'4to':4,'5to':5,'6to':6};
+function csvParsear(texto){
+  const filas=[]; let fila=[],celda='',enQ=false;
+  for(let i=0;i<texto.length;i++){
+    const c=texto[i];
+    if(c==='"'){enQ=!enQ;}
+    else if(c===','&&!enQ){fila.push(celda);celda='';}
+    else if((c==='\n'||c==='\r')&&!enQ){
+      fila.push(celda);celda='';
+      if(fila.some(x=>x!==''))filas.push(fila);
+      fila=[];
+      if(c==='\r'&&texto[i+1]==='\n')i++;
+    }else{celda+=c;}
+  }
+  if(celda||fila.length){fila.push(celda);if(fila.some(x=>x!==''))filas.push(fila);}
+  return filas;
+}
+function csvNum(s){if(s===''||s==null)return 0;return parseFloat(String(s).replace(',','.'))||0;}
+function csvNormReg(s){
+  if(!s)return '';s=s.trim();
+  // "Regional NN" → guardamos como "Regional NN" con número normalizado
+  // Los nombres completos (ej. "08 - SANTIAGO") se preservan tal como están,
+  // solo normalizando el prefijo numérico a 2 dígitos.
+  let m=s.match(/^Regional\s+(\d+)$/i);
+  if(m)return 'Regional '+String(+m[1]).padStart(2,'0');
+  m=s.match(/^(\d+)(.*)$/);
+  if(m)return String(+m[1]).padStart(2,'0')+m[2];
+  return s;
+}
+function csvClasCol(h){
+  let m;
+  m=h.match(/^Matr[íi]cula\s+(\d+(?:ro|do|to))$/i);
+  if(m)return{tipo:'mat',grado:CSV_GRADO[m[1].toLowerCase()]||0};
+  m=h.match(/^EVALUADOS?\s+(\d+(?:ro|do|to))$/i);
+  if(m)return{tipo:'ev',grado:CSV_GRADO[m[1].toLowerCase()]||0};
+  m=h.match(/^G(\d)-([A-Z]+)-IND(\d+)\.(\d+)\s*\(([SAE])\)$/i);
+  if(m){const area=CSV_AREA[m[2].toUpperCase()];if(!area)return null;
+    return{tipo:'perf',grado:+m[1],area,comp:m[3],ind:`${m[3]}.${m[4]}`,nivel:CSV_NIVEL[m[5].toUpperCase()]};}
+  m=h.match(/^G(\d)-LT-(N\d)/i);
+  if(m){const nombre=CSV_READ[m[2].toUpperCase()];if(!nombre)return null;
+    return{tipo:'lect',grado:+m[1],nombre};}
+  return null;
+}
+function csvConstruir(entradas){
+  const dictArr=[],dictMap=new Map();
+  function d(s){s=String(s==null?'':s);if(dictMap.has(s))return dictMap.get(s);const i=dictArr.length;dictArr.push(s);dictMap.set(s,i);return i;}
+  const cov=[],perf_base=[],perf_comp=[],perf_ind=[],read=[];
+  const metaMap=new Map();
+  function procesarCSV(texto,periodo){
+    if(!texto||!texto.trim())return;
+    const filas=csvParsear(texto);
+    if(filas.length<2)return;
+    const enc=filas[0];
+    const colInfo=enc.map(csvClasCol);
+    const iPer=d(periodo);
+    const norm=h=>String(h||'').toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    const hdrIdx={};enc.forEach((h,i)=>{hdrIdx[norm(h)]=i;});
+    const col=(...ns)=>{for(const n of ns){if(hdrIdx[n]!==undefined)return hdrIdx[n];}return -1;};
+    const iColCentro = col('centro','nombre centro','centro educativo','nombre del centro','nombre de centro');
+    const iColReg    = col('regional','nombre regional','regional educativa','regional de educacion','region');
+    const iColDis    = col('distrito','nombre distrito','distrito educativo','distrito escolar');
+    const iColSec    = col('sector','sector educativo','tipo sector');
+    const iColTip    = col('tipo','tipo de centro','tipologia','tipo centro','tipología');
+    const iColTan    = col('tanda','jornada','turno');
+    const g=(i)=>(i>=0?(filas[0]&&fila[i]||'').trim():''); // placeholder, redefined per row below
+    console.log(`[CSV ${periodo}] Columnas detectadas: centro=${iColCentro}, regional=${iColReg}, distrito=${iColDis}, sector=${iColSec}, tipo=${iColTip}, tanda=${iColTan}`);
+    console.log(`[CSV ${periodo}] Filas procesadas: ${filas.length-1}. COV antes: ${cov.length}`);
+    const primerArea=new Map(),primerComp=new Map();
+    for(const c of colInfo){
+      if(!c||c.tipo!=='perf')continue;
+      const ka=`${c.grado}|${c.area}`;if(!primerArea.has(ka))primerArea.set(ka,{comp:c.comp,ind:c.ind});
+      const kc=`${c.grado}|${c.area}|${c.comp}`;if(!primerComp.has(kc))primerComp.set(kc,{comp:c.comp,ind:c.ind});
+    }
+    for(let ri=1;ri<filas.length;ri++){
+      const fila=filas[ri];
+      if(!fila||fila.length<7)continue;
+      const gf=(i)=>(i>=0?(fila[i]||'').trim():'');
+      const centro=gf(iColCentro);if(!centro)continue;
+      const iReg=d(csvNormReg(gf(iColReg)));
+      const iDis=d(gf(iColDis));
+      const iCen=d(centro);
+      const iTip=d(gf(iColTip));
+      const iTan=d(gf(iColTan));
+      const iSec=d(gf(iColSec));
+      const mat={},ev={};
+      for(let ci=0;ci<colInfo.length;ci++){
+        const c=colInfo[ci];if(!c)continue;
+        const v=csvNum(fila[ci]);
+        if(c.tipo==='mat')mat[c.grado]=(mat[c.grado]||0)+v;
+        else if(c.tipo==='ev')ev[c.grado]=(ev[c.grado]||0)+v;
+      }
+      const grados=new Set([...Object.keys(mat),...Object.keys(ev)].map(Number));
+      for(const g2 of grados){
+        cov.push([iReg,iDis,iCen,iSec,iTip,iTan,iPer,g2,g2,mat[g2]||0,ev[g2]||0]); // g2 = número real de grado
+      }
+      for(let ci=0;ci<colInfo.length;ci++){
+        const c=colInfo[ci];if(!c)continue;
+        const v=csvNum(fila[ci]);
+        if(c.tipo==='perf'){
+          const iArea=d(c.area),iComp=d(c.comp),iInd=d(c.ind),iNiv=d(c.nivel);
+          const mk=`${c.area}||${c.comp}||${c.ind}`;
+          if(!metaMap.has(mk))metaMap.set(mk,[iArea,iComp,iInd]);
+          if(v>0)perf_ind.push([iReg,iDis,iCen,iSec,iTip,iTan,iPer,c.grado,c.grado,iArea,iComp,iInd,iNiv,v]);
+          const pc=primerComp.get(`${c.grado}|${c.area}|${c.comp}`);
+          if(pc&&pc.comp===c.comp&&pc.ind===c.ind)perf_comp.push([iReg,iDis,iCen,iSec,iTip,iTan,iPer,c.grado,c.grado,iArea,iComp,-1,iNiv,v]);
+          const pa=primerArea.get(`${c.grado}|${c.area}`);
+          if(pa&&pa.comp===c.comp&&pa.ind===c.ind)perf_base.push([iReg,iDis,iCen,iSec,iTip,iTan,iPer,c.grado,c.grado,iArea,-1,-1,iNiv,v]);
+        }else if(c.tipo==='lect'&&v>0){
+          read.push([iReg,iDis,iCen,iSec,iTip,iTan,iPer,c.grado,c.grado,d(c.nombre),v]);
+        }
+      }
+    }
+  }
+  for(const e of entradas){
+    if(e.textoPC)procesarCSV(e.textoPC,e.periodo);
+    if(e.textoSC)procesarCSV(e.textoSC,e.periodo);
+  }
+  // Unificar nombres de regional: si el dataset tiene tanto "08 - SANTIAGO"
+  // (de las hojas de PC) como "Regional 08" (de las hojas de SC) para el mismo
+  // número, redirigir todas las filas del SC al nombre completo del PC.
+  const regNumANombre=new Map(); // "08" → índice de "08 - SANTIAGO"
+  dictArr.forEach((s,i)=>{
+    const m=s.match(/^(\d{2})\s+[-–]?\s*\S/);
+    if(m&&!regNumANombre.has(m[1]))regNumANombre.set(m[1],i);
+  });
+  const regRemap=new Map(); // índice de "Regional 08" → índice de "08 - SANTIAGO"
+  dictArr.forEach((s,i)=>{
+    const m=s.match(/^Regional\s+(\d+)$/i);
+    if(m){
+      const num=String(+m[1]).padStart(2,'0');
+      if(regNumANombre.has(num))regRemap.set(i,regNumANombre.get(num));
+    }
+  });
+  if(regRemap.size>0){
+    const remap=arr=>arr.forEach(r=>{if(regRemap.has(r[0]))r[0]=regRemap.get(r[0]);});
+    remap(cov);remap(perf_base);remap(perf_comp);remap(perf_ind);remap(read);
+  }
+
+  return{dict:dictArr,cov,perf_base,perf_comp,perf_ind,read,meta:Array.from(metaMap.values()),version:'csv'};
+}
+function csvObtenerUrls(){
+  // Leer desde localStorage (escrito por index.html en cada cambio de año).
+  // Esto evita los problemas de codificación que ocurren cuando se pasan
+  // URLs largas de Google Sheets como parámetros en la URL del iframe.
+  try{
+    const stored=JSON.parse(localStorage.getItem('sirevDashboardUrls')||'{}');
+    const per=stored.periodos||{};
+    const g=(p,c)=>per[p]?.[c]||'';
+    const urls=[
+      {periodo:'Septiembre',pc:g('septiembre','pc'),sc:g('septiembre','sc')},
+      {periodo:'Noviembre', pc:g('noviembre','pc'), sc:g('noviembre','sc')},
+      {periodo:'Marzo',     pc:g('marzo','pc'),     sc:g('marzo','sc')},
+      {periodo:'Mayo',      pc:g('mayo','pc'),      sc:g('mayo','sc')},
+    ].filter(e=>e.pc||e.sc);
+    if(urls.length) return urls;
+  }catch(e){}
+  // Respaldo: leer desde parámetros de URL (descodificando correctamente)
+  const params=new URLSearchParams(window.location.search);
+  const g=k=>{const v=params.get(k); return v?decodeURIComponent(v):''};
+  return [
+    {periodo:'Septiembre',pc:g('pcSep'),sc:g('scSep')},
+    {periodo:'Noviembre', pc:g('pcNov'),sc:g('scNov')},
+    {periodo:'Marzo',     pc:g('pcMar'),sc:g('scMar')},
+    {periodo:'Mayo',      pc:g('pcMay'),sc:g('scMay')},
+  ].filter(e=>e.pc||e.sc);
+}
+async function csvFetcher(url){
+  if(!url)return null;
+  url=url.replace(/\/pubhtml(\?.*)?$/,'/pub?output=csv');
+  const resp=await fetch(url);
+  if(!resp.ok)throw new Error(`Error ${resp.status} al cargar: ${url}`);
+  return resp.text();
+}
+// ── FIN CARGADOR CSV ──────────────────────────────────────────────────
+
 async function loadConfiguredDataScripts(){
   const urls=dataScriptParams();
   if(!urls.length) return;
@@ -1333,44 +1535,66 @@ async function loadConfiguredDataScripts(){
 }
 async function loadData(){
   try{
-    await loadConfiguredDataScripts();
-    const missingCore=validateParts('SIREV_CORE_B64_PARTS',5);
-    if(missingCore.length) throw new Error('Faltan partes del archivo core: '+missingCore.map(n=>'part'+n).join(', ')+'.');
-    loadMsg('Uniendo datos principales...');
-    window.SIREV_CORE_B64=(window.SIREV_CORE_B64_PARTS||[]).join('');
-    loadMsg('Descomprimiendo datos principales...');
-    DATA=decodeB64Gz(window.SIREV_CORE_B64);
-    // Exponer referencias para módulos externos como dashboard_mayo_v41.js.
-    window.DATA = DATA;
-    D=DATA.dict; PERF_BASE=DATA.perf_base||[]; PERF_COMP=DATA.perf_comp||[]; READ=DATA.read; COV=DATA.cov;
-    window.D = D;
-    window.PERF_BASE = PERF_BASE;
-    window.PERF_COMP = PERF_COMP;
-    window.READ = READ;
-    window.COV = COV;
-    // Inicializar el dashboard pero mantener la pantalla de carga visible mientras
-    // dashboard_mayo_v41.js descarga e integra los datos de mayo desde Google Sheets.
-    // Cuando el módulo termine, establece window.__SIREV_MAYO_READY__ = true y luego
-    // la pantalla de carga se oculta — así nunca se ve el "flash" de Marzo.
-    init();
-    loadMsg('Cargando datos de Mayo...');
-    await new Promise(resolve=>{
-      if(window.__SIREV_MAYO_READY__){ resolve(); return; }
-      const start=Date.now();
-      const poll=()=>{
-        if(window.__SIREV_MAYO_READY__ || Date.now()-start>15000){ resolve(); return; }
-        setTimeout(poll, 150);
-      };
-      poll();
-    });
-    document.getElementById('loading').style.display='none';
+    const periodoUrls=csvObtenerUrls();
+
+    if(periodoUrls.length>0){
+      // ── Modo CSV: año con hojas publicadas configuradas ────────────
+      // Activar el flag ANTES de cualquier await para que el módulo de Mayo
+      // lo detecte en cuanto el dashboard esté listo y salga sin inyectar nada.
+      window.__SIREV_CSV_MODE__=true;
+      const entradas=[];
+      for(const e of periodoUrls){
+        loadMsg(`Cargando ${e.periodo}...`);
+        const [textoPC,textoSC]=await Promise.all([csvFetcher(e.pc),csvFetcher(e.sc)]);
+        entradas.push({periodo:e.periodo,textoPC,textoSC});
+      }
+      loadMsg('Procesando datos...');
+      DATA=csvConstruir(entradas);
+      D=DATA.dict;
+      PERF_BASE=DATA.perf_base||[];PERF_COMP=DATA.perf_comp||[];PERF_IND=DATA.perf_ind||[];
+      READ=DATA.read;COV=DATA.cov;
+      window.DATA=DATA;window.D=D;window.PERF_BASE=PERF_BASE;window.PERF_COMP=PERF_COMP;
+      window.READ=READ;window.COV=COV;window.PERF_IND=PERF_IND;
+      // Evitar que dashboard_mayo_v41.js inyecte datos del año incorrecto:
+      // vaciamos las URLs que usa ese módulo y señalamos que Mayo ya está cargado.
+      window.pcUrl=''; window.scUrl='';
+      window.__SIREV_MAYO_READY__=true;
+      document.getElementById('loading').style.display='none';
+      init();
+
+    } else {
+      // ── Modo compilado: año 2025-2026 con archivos JS en el repo ──
+      await loadConfiguredDataScripts();
+      const missingCore=validateParts('SIREV_CORE_B64_PARTS',5);
+      if(missingCore.length) throw new Error('Faltan partes del archivo core: '+missingCore.map(n=>'part'+n).join(', ')+'.');
+      loadMsg('Uniendo datos principales...');
+      window.SIREV_CORE_B64=(window.SIREV_CORE_B64_PARTS||[]).join('');
+      loadMsg('Descomprimiendo datos principales...');
+      DATA=decodeB64Gz(window.SIREV_CORE_B64);
+      window.DATA=DATA;
+      D=DATA.dict;PERF_BASE=DATA.perf_base||[];PERF_COMP=DATA.perf_comp||[];READ=DATA.read;COV=DATA.cov;
+      window.D=D;window.PERF_BASE=PERF_BASE;window.PERF_COMP=PERF_COMP;window.READ=READ;window.COV=COV;
+      init();
+      loadMsg('Cargando datos de Mayo...');
+      await new Promise(resolve=>{
+        if(window.__SIREV_MAYO_READY__){resolve();return;}
+        const start=Date.now();
+        const poll=()=>{
+          if(window.__SIREV_MAYO_READY__||Date.now()-start>15000){resolve();return;}
+          setTimeout(poll,150);
+        };
+        poll();
+      });
+      document.getElementById('loading').style.display='none';
+    }
+
   }catch(err){
     console.error(err);
-    showLoadError(err.message || String(err));
+    showLoadError(err.message||String(err));
   }
 }
 function ensureIndLoaded(){
-  if(PERF_IND) return true;
+  if(PERF_IND&&PERF_IND.length>0) return true; // ya cargado (modo CSV o compilado)
   const missingInd=validateParts('SIREV_IND_B64_PARTS',4);
   if(missingInd.length){
     alert('No se puede filtrar por indicador porque faltan partes del detalle: '+missingInd.map(n=>'part'+n).join(', ')+'.');
