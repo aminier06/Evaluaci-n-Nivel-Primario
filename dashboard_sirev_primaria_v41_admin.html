@@ -2724,10 +2724,14 @@ function textoResumen(amb, st, periodo){
     amb.tipo==='regional' ? `En la Regional ${amb.nombre}` :
     amb.tipo==='distrito' ? `En el Distrito ${amb.nombre}` :
     `En el centro educativo ${amb.nombre}`;
-  const cuando = periodo ? `, en ${periodo} (el periodo más reciente con datos disponible)` : '';
-  let txt = `${sujeto}${cuando} se registraron ${fmt(cov.mat)} estudiantes matriculados, de los cuales ${fmt(cov.ev)} fueron evaluados, es decir, ${pctf(pct(cov.ev,cov.mat))} de cobertura. Los resultados de distintos periodos no se suman entre sí, porque corresponden a momentos de evaluación diferentes; la tabla siguiente muestra cada periodo por separado.`;
+  const cuando = periodo ? ` durante ${periodo}` : '';
+  const porcentaje = pct(cov.ev,cov.mat);
+  const nivelCob = porcentaje>=95 ? 'una cobertura muy alta' : porcentaje>=85 ? 'una cobertura alta' : porcentaje>=70 ? 'una cobertura moderada' : 'una cobertura baja';
+  let txt = `${sujeto}${cuando} se registró una matrícula de ${fmt(cov.mat)} estudiantes, de los cuales ${fmt(cov.ev)} participaron en la evaluación, lo que representa ${nivelCob} del ${pctf(porcentaje)}.`;
   if(amb.tipo!=='centro'){
-    txt += ` En ese periodo, la cifra agrupa ${fmt(cov.regs)} regional(es), ${fmt(cov.dists)} distrito(s) y ${fmt(cov.cent)} centro(s) con registro de resultados.`;
+    txt += ` Los resultados correspondientes a ese periodo abarcan ${fmt(cov.regs)} regional(es), ${fmt(cov.dists)} distrito(s) y ${fmt(cov.cent)} centros educativos con registro de evaluación.`;
+  } else {
+    txt += ` Los resultados por periodo y área se presentan en las secciones siguientes.`;
   }
   return txt;
 }
@@ -3356,11 +3360,8 @@ async function generarInformePDF(){
     doc.setFont('helvetica','normal'); doc.setFontSize(10.5); doc.setTextColor(74,96,120);
     doc.text(nombreAmbito, marginX, y); y += 14;
     if(anioEscolar) { doc.text(`Año escolar: ${anioEscolar}`, marginX, y); y += 14; }
-    doc.text(`Periodos incluidos: ${fExport.periods.length?fExport.periods.join(', '):'sin datos'} (se muestran todos para comparar)`, marginX, y); y += 14;
+    doc.text(`Periodos incluidos: ${fExport.periods.length?fExport.periods.join(', '):'sin datos'}`, marginX, y); y += 14;
     doc.text(`Generado el ${new Date().toLocaleDateString('es-DO',{day:'numeric',month:'long',year:'numeric'})}`, marginX, y); y += 13;
-    doc.setFontSize(7.5); doc.setTextColor(150,162,178);
-    doc.text('Versión del generador del informe: v4 (tablas consolidadas por periodo, gráficos de línea)', marginX, y); y += 16;
-    doc.setTextColor(20,35,63);
 
     window.__PDF_SECCION_ACTUAL__ = 'Resumen del ámbito';
     titulo('Resumen del ámbito');
@@ -3544,7 +3545,7 @@ async function generarInformePDF(){
     const gradoAreaTerritorial = desempenoGradoAreaTerritorialEvolucion(amb, periodosDisponibles, perfX);
     if(gradoAreaTerritorial && gradoAreaTerritorial.grupos.length){
       titulo(`Desempeño por grado y área según ${gradoAreaTerritorial.label}`);
-      parrafo('Los resultados de periodos distintos no se suman entre sí. Cada tabla corresponde a un grado y cada fila conserva la desagregación territorial del ámbito junto con el área evaluada; los periodos aparecen como columnas para observar la evolución.', 9.5);
+      
       for(const g of gradoAreaTerritorial.grupos){
         await tablaPeriodosAgrupados(
           gradoAreaTerritorial.headers,
