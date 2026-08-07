@@ -1350,9 +1350,7 @@ function abrirMarcoEvaluacion() {
 }
 
 function abrirMonitoreo() {
-    const url = datosPorAnio[anioSeleccionado].sistematizacion?.mayo;
-    if (url) window.open(agregarParametrosAdmin(url), "_blank");
-    else alert("Monitoreo no disponible para este año escolar.");
+    window.open("https://monitoreoregistro.sirevprimaria.net/", "_blank");
     cerrarMenus();
 }
 
