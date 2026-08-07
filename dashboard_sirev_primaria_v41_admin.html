@@ -2797,6 +2797,8 @@ async function generarInformePDF(){
     // El periodo nunca se toma del dashboard: el informe siempre usa todos
     // los periodos disponibles para poder compararlos entre sí.
     const fExport = {...filters(), periods: availablePeriods()};
+    // Leer el año escolar activo que el index.html pasa como parámetro de URL
+    const anioEscolar = new URLSearchParams(window.location.search).get('anio') || '';
     const { perf: perfX, read: readX, cov: covX } = computeScopeRows(fExport);
 
     const amb = ambitoActual(fExport, covX);
@@ -3353,6 +3355,7 @@ async function generarInformePDF(){
     doc.text('Informe descriptivo de resultados', marginX, y); y += 20;
     doc.setFont('helvetica','normal'); doc.setFontSize(10.5); doc.setTextColor(74,96,120);
     doc.text(nombreAmbito, marginX, y); y += 14;
+    if(anioEscolar) { doc.text(`Año escolar: ${anioEscolar}`, marginX, y); y += 14; }
     doc.text(`Periodos incluidos: ${fExport.periods.length?fExport.periods.join(', '):'sin datos'} (se muestran todos para comparar)`, marginX, y); y += 14;
     doc.text(`Generado el ${new Date().toLocaleDateString('es-DO',{day:'numeric',month:'long',year:'numeric'})}`, marginX, y); y += 13;
     doc.setFontSize(7.5); doc.setTextColor(150,162,178);
@@ -3590,7 +3593,8 @@ async function generarInformePDF(){
     parrafo('Cobertura: el porcentaje de estudiantes matriculados que efectivamente fueron evaluados. Una cobertura baja significa que los resultados representan solo a una parte de los estudiantes del ámbito, y conviene interpretarlos con cautela.', 9);
 
     const fechaArchivo = new Date().toISOString().slice(0,10);
-    const nombreArchivo = `informe_sirev_${amb.tipo}_${String(amb.nombre||'nacional').replace(/[\/\\?*\[\]:]/g,'').slice(0,40)}_${fechaArchivo}.pdf`;
+    const anioSufijo = anioEscolar ? `_${anioEscolar.replace(/[^0-9\-]/g,'')}` : '';
+    const nombreArchivo = `informe_sirev_${amb.tipo}_${String(amb.nombre||'nacional').replace(/[\/\\?*\[\]:]/g,'').slice(0,40)}${anioSufijo}_${fechaArchivo}.pdf`;
     doc.save(nombreArchivo);
   }catch(err){
     console.error('[SIREV PDF] Error en sección:', window.__PDF_SECCION_ACTUAL__||'(inicio)');
